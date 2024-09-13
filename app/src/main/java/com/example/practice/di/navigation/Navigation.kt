@@ -1,4 +1,4 @@
-package com.example.practice.ui.navigation
+package com.example.practice.di.navigation
 
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.rememberDrawerState
@@ -9,9 +9,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.practice.ui.appui.Detail
 import com.example.practice.ui.appui.HomeScreen
-import com.example.practice.ui.appui.LogIn
 import com.example.practice.ui.appui.Order
-import com.example.practice.ui.appui.SignUp
 import com.example.practice.ui.appui.SplashScreen
 import com.example.practice.ui.components.NavigationDrawer
 import com.example.practice.ui.data.Sealed
@@ -23,12 +21,12 @@ fun CoffeeNavigation(){
         composable(Sealed.SplashScreen.name){
             SplashScreen(navController)
         }
-        composable(Sealed.LogIn.name){
-            LogIn(navController)
-        }
-        composable(Sealed.SignUp.name){
-            SignUp(navController)
-        }
+//        composable(Sealed.LogIn.name){
+//            LogIn(navController)
+//        }
+//        composable(Sealed.SignUp.name){
+//            SignUp(navController)
+//        }
         composable((Sealed.NavigationDrawer.name)){
             NavigationDrawer(navController)
         }

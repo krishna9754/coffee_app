@@ -67,7 +67,7 @@ fun SplashScreen(navController: NavHostController) {
             ProgressLoader()
             LaunchedEffect(Unit) {
                 delay(3000)
-                navController.navigate(route = Sealed.LogIn.name)
+                navController.navigate(route = Sealed.HomeScreen.name)
             }
         } else {
             Column(

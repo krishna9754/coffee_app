@@ -28,6 +28,7 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -44,8 +45,11 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.practice.R
+import com.example.practice.di.CoffeeViewModel
+import com.example.practice.ui.common.ProgressLoader
 import com.example.practice.ui.common.ScaffoldBar
 import com.example.practice.ui.components.BottomBarNavigation
 import com.example.practice.ui.components.ImageSlider
@@ -64,80 +68,93 @@ fun HomeScreen(navController: NavHostController, scope: CoroutineScope, drawerSt
         var text by remember {
             mutableStateOf("")
         }
-        Column(
-            modifier = Modifier
-                .height(300.dp)
-                .fillMaxWidth()
-                .background(color = Color(0xFF131313))
-        ) {}
 
-
-        Column(
-            modifier = Modifier
-                .padding(horizontal = 14.dp)
-                .fillMaxHeight(),
-            verticalArrangement = Arrangement.Bottom
-        ) {
-
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 30.dp),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Image(
-                    painter = painterResource(id = R.drawable.ic_user),
-                    contentDescription = "",
-                    modifier = Modifier
-                        .clickable { scope.launch { drawerState.open() } }
-                        .size(55.dp)
-                )
-                Text(text = "Location \nBil zen, Kanchenjunga", color = Color(0xffB7B7B7), textAlign = TextAlign.End)
-            }
-
-            OutlinedTextField(modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 30.dp),
-                value = text,
-                onValueChange = { text = it },
-                placeholder = {
-                    Text(
-                        text = "Search Coffee", color = Color(0xff989898)
-                    )
-                },
-                shape = RoundedCornerShape(15.dp),
-                leadingIcon = {
-                    Icon(
-                        imageVector = Icons.Default.Search,
-                        modifier = Modifier.size(30.dp),
-                        contentDescription = ""
-                    )
-                },
-                trailingIcon = {
-                    Image(
-                        painter = painterResource(id = R.drawable.ic_filter),
-                        contentDescription = "",
-                        modifier = Modifier.padding(end = 5.dp)
-                    )
-                },
-                colors = TextFieldDefaults.outlinedTextFieldColors(
-                    focusedBorderColor = Color(0xffC67C4E),
-                    unfocusedBorderColor = Color.LightGray,
-                    focusedTextColor = Color.White
-                ),
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Text,
-                    imeAction = ImeAction.Done
-                )
-            )
+        val viewModel = viewModel(modelClass = CoffeeViewModel::class.java)
+        val state by viewModel.state.collectAsState()
+        if (state.isEmpty()) {
+            ProgressLoader()
+        } else {
             Column(
-                modifier = Modifier.fillMaxWidth().height(210.dp),
+                modifier = Modifier
+                    .height(300.dp)
+                    .fillMaxWidth()
+                    .background(color = Color(0xFF131313))
+            ) {}
+
+
+            Column(
+                modifier = Modifier
+                    .padding(horizontal = 14.dp)
+                    .fillMaxHeight(),
+                verticalArrangement = Arrangement.Bottom
             ) {
-                ImageSlider()
+
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 30.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.ic_user),
+                        contentDescription = "",
+                        modifier = Modifier
+                            .clickable { scope.launch { drawerState.open() } }
+                            .size(55.dp)
+                    )
+                    Text(
+                        text = "Location \nBil zen, Kanchenjunga",
+                        color = Color(0xffB7B7B7),
+                        textAlign = TextAlign.End
+                    )
+                }
+
+//            OutlinedTextField(modifier = Modifier
+//                .fillMaxWidth()
+//                .padding(vertical = 30.dp),
+//                value = text,
+//                onValueChange = { text = it },
+//                placeholder = {
+//                    Text(
+//                        text = "Search Coffee", color = Color(0xff989898)
+//                    )
+//                },
+//                shape = RoundedCornerShape(15.dp),
+//                leadingIcon = {
+//                    Icon(
+//                        imageVector = Icons.Default.Search,
+//                        modifier = Modifier.size(30.dp),
+//                        contentDescription = ""
+//                    )
+//                },
+//                trailingIcon = {
+//                    Image(
+//                        painter = painterResource(id = R.drawable.ic_filter),
+//                        contentDescription = "",
+//                        modifier = Modifier.padding(end = 5.dp)
+//                    )
+//                },
+//                colors = TextFieldDefaults. (
+//                    focusedBorderColor = Color(0xffC67C4E),
+//                    unfocusedBorderColor = Color.LightGray,
+//                    focusedTextColor = Color.White
+//                ),
+//                keyboardOptions = KeyboardOptions(
+//                    keyboardType = KeyboardType.Text,
+//                    imeAction = ImeAction.Done
+//                )
+//            )
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(210.dp),
+                ) {
+                    ImageSlider()
+                }
+                RowLazy()
+                Coffee(navController)
             }
-            RowLazy()
-            Coffee(navController)
         }
     }
 
@@ -176,5 +193,9 @@ fun RowLazy() {
 fun PreviewScreen() {
     val scope = rememberCoroutineScope()
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
-   HomeScreen(navController = NavHostController(LocalContext.current), scope = scope, drawerState = drawerState)
+    HomeScreen(
+        navController = NavHostController(LocalContext.current),
+        scope = scope,
+        drawerState = drawerState
+    )
 }

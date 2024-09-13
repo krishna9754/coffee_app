@@ -2,6 +2,8 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
     id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
+    id ("kotlin-kapt")
+    id ("com.google.dagger.hilt.android")
 
 }
 
@@ -66,17 +68,35 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
-    implementation("com.airbnb.android:lottie-compose:5.2.0")
+    implementation("com.airbnb.android:lottie-compose:6.4.0")
     implementation ("com.google.maps.android:maps-compose:4.3.3")
-    implementation("com.google.android.gms:play-services-maps:18.2.0")
-    implementation("androidx.navigation:navigation-compose:2.7.6")
+    implementation("com.google.android.gms:play-services-maps:19.0.0")
+    implementation("androidx.navigation:navigation-compose:2.8.0")
 
     //Material UI 3
-    implementation("androidx.compose.material3:material3:1.2.1")
-    implementation("androidx.compose.material3:material3-window-size-class:1.2.1")
-    implementation("androidx.compose.material3:material3-adaptive-navigation-suite:1.0.0-alpha05")
+    implementation("androidx.compose.material3:material3:1.3.0")
+    implementation("androidx.compose.material3:material3-window-size-class:1.3.0")
+    implementation("androidx.compose.material3:material3-adaptive-navigation-suite:1.3.0")
 
     //Animation Navigation bar
     implementation("com.exyte:animated-navigation-bar:1.0.0")
 
+    // Moshi converter for parsing JSON responses
+    implementation ("com.squareup.retrofit2:converter-moshi:2.11.0")
+    implementation ("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
+
+    // Moshi library for JSON parsing and serialization
+    implementation ("com.squareup.moshi:moshi-kotlin:1.15.1")
+
+    // Moshi adapters for common data types like Java 8 dates and times
+    implementation ("com.squareup.moshi:moshi-adapters:1.13.0")
+
+    implementation ("com.google.dagger:hilt-android:2.51.1")
+    kapt ("com.google.dagger:hilt-compiler:2.51.1")
+
+}
+
+kapt {
+    correctErrorTypes = true
 }
