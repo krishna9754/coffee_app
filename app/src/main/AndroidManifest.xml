@@ -3,8 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:ignore="CoarseFineLocation">
     <uses-permission android:name="android.permission.INTERNET" />
-    
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
         android:name=".BaseApplication"
@@ -17,11 +15,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Practice"
         tools:targetApi="31">
-
-        <meta-data
-            android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyD_bqytgjhSHTCSzsjuv4XB8u7Y-NFwFAo"/>
-
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -29,7 +22,6 @@
             android:theme="@style/Theme.Practice">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

@@ -42,10 +42,10 @@ import com.example.practice.ui.data.Sealed
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Detail(navController: NavHostController, onBack: () -> Unit) = ScaffoldBar(
+fun Detail(onNext: () -> Unit, onBack: () -> Boolean) = ScaffoldBar(
     title = R.string.detail,
-    onBack = onBack,
-    bottomBar = { PriceTag(navController) }
+    onBack = { onBack.invoke() },
+    bottomBar = { PriceTag(onNext) }
 ) {
     LazyColumn(
         modifier = Modifier
@@ -162,12 +162,12 @@ fun SelectSize() {
                         color = colorSelect,
                         shape = RoundedCornerShape(14.dp)
                     )
-                    .padding(vertical = 15.dp)
-                    .clickable { selectedButtonIndex.value = index }
+                    .padding(vertical = 15.dp, horizontal = 15.dp)
+                    .clickable { selectedButtonIndex.value = index },
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
                     text = option,
-                    modifier = Modifier.fillMaxWidth(),
                     color = textColorSelect,
                     textAlign = TextAlign.Center
                 )
@@ -178,7 +178,7 @@ fun SelectSize() {
 
 
 @Composable
-fun PriceTag(navController: NavHostController) {
+fun PriceTag(onNext: () -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -195,17 +195,11 @@ fun PriceTag(navController: NavHostController) {
             modifier = Modifier
                 .padding(15.dp)
                 .fillMaxWidth(),
-            onClick = { navController.navigate(Sealed.Order.name) },
+            onClick = { onNext.invoke() },
             colors = ButtonDefaults.buttonColors(Color(0xffC67C4E)),
             shape = RoundedCornerShape(10.dp)
         ) {
             Text(text = "Buy Now", modifier = Modifier.padding(vertical = 5.dp, horizontal = 20.dp))
         }
     }
-}
-
-@Preview
-@Composable
-fun DetailPreview() {
-    Detail(navController = NavHostController(LocalContext.current), onBack = {})
 }

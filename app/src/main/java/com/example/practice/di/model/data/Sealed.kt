@@ -8,7 +8,8 @@ enum class Sealed {
     HomeScreen,
     Detail,
     Order,
-    Coffee;
+    Coffee,
+    ThankYou;
     companion object{
         fun fromRoute(route: String?): Sealed
         = when(route?.substringBefore("/")){
@@ -20,6 +21,7 @@ enum class Sealed {
             Detail.name -> Detail
             Order.name -> Order
             Coffee.name -> Coffee
+            ThankYou.name -> ThankYou
             null -> HomeScreen
             else -> throw IllegalArgumentException("Route $route is not recognize")
         }

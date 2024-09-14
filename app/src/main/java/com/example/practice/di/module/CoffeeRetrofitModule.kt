@@ -12,19 +12,17 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object CoffeeRetrofitModule {
-
     @Provides
     @Singleton
-    fun provideCoffeeApi(retrofit: Retrofit): CoffeeApiService {
-        return retrofit.create(CoffeeApiService::class.java)
+    fun provideCoffeeApi(builder: Retrofit.Builder): CoffeeApiService {
+        return builder.build().create(CoffeeApiService::class.java)
     }
 
     @Provides
     @Singleton
-    fun provideRetrofit(): Retrofit {
+    fun provideRetrofit(): Retrofit.Builder {
         return Retrofit.Builder()
             .baseUrl(ApiConstant.BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
-            .build() // Create Retrofit object here
     }
 }

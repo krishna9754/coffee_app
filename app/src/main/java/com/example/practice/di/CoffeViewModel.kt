@@ -18,8 +18,8 @@ class CoffeeViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            val charactersData = coffeeRepo
-            _state.value = charactersData.getCoffee()
+            val coffeeData = coffeeRepo.getCoffee()
+            _state.value = coffeeData
         }
     }
 }

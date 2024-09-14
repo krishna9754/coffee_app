@@ -91,6 +91,7 @@ dependencies {
 
     // Moshi adapters for common data types like Java 8 dates and times
     implementation ("com.squareup.moshi:moshi-adapters:1.13.0")
+    implementation ("androidx.hilt:hilt-navigation-compose:1.2.0")
 
     implementation ("com.google.dagger:hilt-android:2.51.1")
     kapt ("com.google.dagger:hilt-compiler:2.51.1")

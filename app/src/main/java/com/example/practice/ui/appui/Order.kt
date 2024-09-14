@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
@@ -23,6 +24,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -34,26 +36,26 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavHostController
 import com.example.practice.R
 import com.example.practice.ui.common.ScaffoldBar
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Order(navController: NavHostController, onBack: () -> Unit) = ScaffoldBar(
+fun Order(onNext: () -> Unit, onBack: () -> Boolean) = ScaffoldBar(
     title = R.string.order,
     Icon = false,
-    onBack = onBack,
-    bottomBar = { BootomBB() },
+    onBack = { onBack.invoke() },
+    bottomBar = { BootomBB(onNext) },
     appBarColor = TopAppBarDefaults.topAppBarColors(Color.Transparent)
 ) {
 
+    val editableText = remember { mutableStateOf("") }
+    var savedAddress by remember { mutableStateOf("") } // Add state to store the saved address
+    var saved by remember { mutableStateOf(true) }
     var items by remember {
         mutableStateOf(1)
     }
@@ -102,13 +104,18 @@ fun Order(navController: NavHostController, onBack: () -> Unit) = ScaffoldBar(
             fontWeight = FontWeight.SemiBold
         )
 
-        Text(
-            text = "Jl. Kpg Sautoy",
-            modifier = Modifier.padding(top = 10.dp),
-            fontSize = 16.sp,
-        )
-
-        Text(text = "Kpg. Sautoy No. 620, Bil zen, Kanchenjunga.", color = Color(0xff808080))
+        if (saved) {
+            OutlinedTextField(
+                modifier = Modifier.fillMaxWidth(),
+                value = editableText.value,
+                onValueChange = {
+                    editableText.value = it
+                },
+                placeholder = { Text(text = "Enter Your Address", color = Color.LightGray) },
+                minLines = 5,
+                keyboardActions = KeyboardActions.Default,
+            )
+        }
 
         Row(
             modifier = Modifier.padding(top = 15.dp),
@@ -119,23 +126,42 @@ fun Order(navController: NavHostController, onBack: () -> Unit) = ScaffoldBar(
                 text = "Edit Address",
                 modifier = Modifier
                     .padding(top = 10.dp)
+                    .clickable { saved = !saved }
                     .border(BorderStroke(1.dp, Color.LightGray), shape = RoundedCornerShape(20.dp))
                     .padding(vertical = 6.dp, horizontal = 15.dp),
                 fontSize = 13.sp,
             )
+            if (saved) {
+                Text(
+                    text = "Save",
+                    modifier = Modifier
+                        .padding(top = 10.dp)
+                        .clickable {
+                            savedAddress =
+                                editableText.value // Save the address when the button is clicked
+                            saved = !saved
+                        }
+                        .border(
+                            BorderStroke(1.dp, Color.LightGray),
+                            shape = RoundedCornerShape(20.dp)
+                        )
+                        .padding(vertical = 6.dp, horizontal = 15.dp),
+                    fontSize = 13.sp,
+                )
+            }
+        }
 
+        // Display the saved address
+        if (savedAddress.isNotEmpty()) {
             Text(
-                text = "Add Note",
-                modifier = Modifier
-                    .padding(top = 10.dp)
-                    .border(BorderStroke(1.dp, Color.LightGray), shape = RoundedCornerShape(20.dp))
-                    .padding(vertical = 6.dp, horizontal = 15.dp),
-                fontSize = 13.sp,
+                text = "Saved Address: $savedAddress",
+                modifier = Modifier.padding(top = 10.dp),
+                fontSize = 14.sp,
+                color = Color.Gray
             )
         }
 
         Divider(modifier = Modifier.padding(top = 20.dp))
-
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -262,7 +288,7 @@ fun Order(navController: NavHostController, onBack: () -> Unit) = ScaffoldBar(
 }
 
 @Composable
-fun BootomBB() {
+fun BootomBB(onNext: () -> Unit) {
     Card(colors = CardDefaults.cardColors(Color.White), shape = RoundedCornerShape(30.dp)) {
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
 
@@ -314,7 +340,7 @@ fun BootomBB() {
             modifier = Modifier
                 .padding(15.dp)
                 .fillMaxWidth(),
-            onClick = { },
+            onClick = { onNext.invoke() },
             colors = ButtonDefaults.buttonColors(Color(0xffC67C4E)),
             shape = RoundedCornerShape(10.dp)
         ) {
