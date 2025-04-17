@@ -42,12 +42,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.practice.R
 import com.example.practice.ui.common.ScaffoldBar
+import com.exyte.animatednavbar.utils.noRippleClickable
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Order(onNext: () -> Unit, onBack: () -> Boolean) = ScaffoldBar(
     title = R.string.order,
-    Icon = false,
+    Icon = null,
     onBack = { onBack.invoke() },
     bottomBar = { BootomBB(onNext) },
     appBarColor = TopAppBarDefaults.topAppBarColors(Color.Transparent)
@@ -126,7 +127,7 @@ fun Order(onNext: () -> Unit, onBack: () -> Boolean) = ScaffoldBar(
                 text = "Edit Address",
                 modifier = Modifier
                     .padding(top = 10.dp)
-                    .clickable { saved = !saved }
+                    .noRippleClickable { saved = !saved }
                     .border(BorderStroke(1.dp, Color.LightGray), shape = RoundedCornerShape(20.dp))
                     .padding(vertical = 6.dp, horizontal = 15.dp),
                 fontSize = 13.sp,
@@ -136,7 +137,7 @@ fun Order(onNext: () -> Unit, onBack: () -> Boolean) = ScaffoldBar(
                     text = "Save",
                     modifier = Modifier
                         .padding(top = 10.dp)
-                        .clickable {
+                        .noRippleClickable {
                             savedAddress =
                                 editableText.value // Save the address when the button is clicked
                             saved = !saved
@@ -186,7 +187,7 @@ fun Order(onNext: () -> Unit, onBack: () -> Boolean) = ScaffoldBar(
                     contentDescription = "",
                     modifier = Modifier
                         .size(30.dp)
-                        .clickable { if (items >= 2) items = items - 1 },
+                        .noRippleClickable { if (items >= 2) items = items - 1 },
                 )
                 Text(
                     text = "$items",
@@ -197,7 +198,7 @@ fun Order(onNext: () -> Unit, onBack: () -> Boolean) = ScaffoldBar(
                     contentDescription = "",
                     modifier = Modifier
                         .size(30.dp)
-                        .clickable { items = items + 1 }
+                        .noRippleClickable { items = items + 1 }
                 )
             }
 

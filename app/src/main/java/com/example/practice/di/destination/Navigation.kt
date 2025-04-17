@@ -4,9 +4,11 @@ import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.practice.di.CoffeeViewModel
 import com.example.practice.ui.appui.Detail
 import com.example.practice.ui.appui.HomeScreen
 import com.example.practice.ui.appui.Order
@@ -30,8 +32,7 @@ fun CoffeeNavigation() {
             val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
             HomeScreen(
                 onNext = { navController.navigate(Sealed.Detail.name) },
-                scope = scope,
-                drawerState = drawerState
+
             )
         }
         composable(Sealed.Detail.name) {

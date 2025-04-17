@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.practice.R
 import com.example.practice.ui.data.Sealed
+import com.exyte.animatednavbar.utils.noRippleClickable
 
 @Composable
 fun Coffee(onNext: () -> Unit) {
@@ -75,7 +76,7 @@ fun Coffee(onNext: () -> Unit) {
                     Image(
                         painter = painterResource(id = R.drawable.ic_plus_icon),
                         contentDescription = "",
-                        modifier = Modifier.clickable { onNext.invoke() }
+                        modifier = Modifier.noRippleClickable { onNext.invoke() }
                     )
                 }
             }

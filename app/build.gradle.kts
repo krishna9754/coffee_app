@@ -4,12 +4,13 @@ plugins {
     id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
     id ("kotlin-kapt")
     id ("com.google.dagger.hilt.android")
+    alias(libs.plugins.compose.compiler)
 
 }
 
 android {
     namespace = "com.example.practice"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.example.practice"
@@ -68,33 +69,33 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
-    implementation("com.airbnb.android:lottie-compose:6.4.0")
-    implementation ("com.google.maps.android:maps-compose:4.3.3")
-    implementation("com.google.android.gms:play-services-maps:19.0.0")
-    implementation("androidx.navigation:navigation-compose:2.8.0")
+    implementation(libs.lottie.compose)
+    implementation (libs.maps.compose)
+    implementation(libs.play.services.maps)
+    implementation(libs.androidx.navigation.compose)
 
     //Material UI 3
-    implementation("androidx.compose.material3:material3:1.3.0")
-    implementation("androidx.compose.material3:material3-window-size-class:1.3.0")
-    implementation("androidx.compose.material3:material3-adaptive-navigation-suite:1.3.0")
+    implementation(libs.material3)
+    implementation(libs.androidx.material3.window.size.class1)
+    implementation(libs.androidx.material3.adaptive.navigation.suite)
 
     //Animation Navigation bar
-    implementation("com.exyte:animated-navigation-bar:1.0.0")
+    implementation(libs.animated.navigation.bar)
 
     // Moshi converter for parsing JSON responses
-    implementation ("com.squareup.retrofit2:converter-moshi:2.11.0")
-    implementation ("com.squareup.retrofit2:retrofit:2.9.0")
-    implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation (libs.converter.moshi)
+    implementation (libs.retrofit)
+    implementation (libs.converter.gson)
 
     // Moshi library for JSON parsing and serialization
-    implementation ("com.squareup.moshi:moshi-kotlin:1.15.1")
+    implementation (libs.moshi.kotlin)
 
     // Moshi adapters for common data types like Java 8 dates and times
-    implementation ("com.squareup.moshi:moshi-adapters:1.13.0")
-    implementation ("androidx.hilt:hilt-navigation-compose:1.2.0")
+    implementation (libs.moshi.adapters)
+    implementation (libs.androidx.hilt.navigation.compose)
 
-    implementation ("com.google.dagger:hilt-android:2.51.1")
-    kapt ("com.google.dagger:hilt-compiler:2.51.1")
+    implementation (libs.hilt.android)
+    kapt (libs.hilt.compiler)
 
 }
 

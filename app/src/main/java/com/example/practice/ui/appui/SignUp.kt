@@ -52,7 +52,7 @@ import com.example.practice.ui.data.Sealed
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SignUp(navController: NavHostController) = ScaffoldBar(
-    Icon = false,
+    Icon = null,
     icon = null,
     title = R.string.sign_Up,
     textColor = Color.White,

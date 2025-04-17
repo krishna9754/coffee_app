@@ -41,12 +41,12 @@ fun ScaffoldBar(
     onBack: () -> Unit = {},
     @StringRes title: Int? = null ,
     @DrawableRes icon: Int? = R.drawable.ic_arrow___left_2,
-    Icon: Boolean = true,
+    Icon: Int? = R.drawable.ic_arrow___left_2,
     bottomBar: @Composable () -> Unit = {},
     textColor: Color = Color(0xff2F2D2C),
     colorEnabled: Boolean = false,
     containerColor: Color = MaterialTheme.colorScheme.background,
-    appBarColor: TopAppBarColors = TopAppBarDefaults.topAppBarColors(Color(0xffFFFFFF)),
+    appBarColor: TopAppBarColors = TopAppBarDefaults.topAppBarColors(Color.White),
     content: @Composable (PaddingValues) -> Unit = {}
 ) {
     Scaffold(
@@ -79,9 +79,9 @@ fun ScaffoldBar(
                             )
                         }
 
-                        if (Icon == true) {
+                        if (Icon != null) {
                             Icon(
-                                painter = painterResource(id = R.drawable.ic_top_heart),
+                                painter = painterResource(id = Icon),
                                 contentDescription = "",
                                 tint = Color(0xff2F2D2C)
                             )

@@ -39,6 +39,7 @@ import androidx.navigation.NavHostController
 import com.example.practice.R
 import com.example.practice.ui.common.ScaffoldBar
 import com.example.practice.ui.data.Sealed
+import com.exyte.animatednavbar.utils.noRippleClickable
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -156,14 +157,14 @@ fun SelectSize() {
             val textColorSelect = if (isSelected) Color(0xffC67C4E) else Color(0xff2F2D2C)
             Column(
                 modifier = Modifier
+                    .noRippleClickable { selectedButtonIndex.value = index }
                     .weight(1f)
                     .border(
                         width = 2.dp,
                         color = colorSelect,
                         shape = RoundedCornerShape(14.dp)
                     )
-                    .padding(vertical = 15.dp, horizontal = 15.dp)
-                    .clickable { selectedButtonIndex.value = index },
+                    .padding(vertical = 15.dp, horizontal = 15.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
