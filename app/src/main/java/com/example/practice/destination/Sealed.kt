@@ -1,4 +1,4 @@
-package com.example.practice.ui.data
+package com.example.practice.destination
 
 enum class Sealed {
     SplashScreen,

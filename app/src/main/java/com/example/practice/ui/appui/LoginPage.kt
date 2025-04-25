@@ -58,7 +58,7 @@
 //import com.example.practice.ui.common.HyperLinkText
 //import com.example.practice.ui.common.ProgressLoader
 //import com.example.practice.ui.common.ScaffoldBar
-//import com.example.practice.ui.data.Sealed
+//import com.example.practice.destination.Sealed
 //import kotlinx.coroutines.delay
 //
 //@OptIn(ExperimentalMaterial3Api::class)

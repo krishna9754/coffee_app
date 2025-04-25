@@ -97,6 +97,19 @@ dependencies {
     implementation (libs.hilt.android)
     kapt (libs.hilt.compiler)
 
+    //Room
+    implementation(libs.androidx.room.runtime)
+    kapt(libs.androidx.room.compiler)
+    implementation(libs.androidx.room.ktx)
+
+    // Retrofit + OkHttp
+    implementation (libs.retrofit.v290)
+    implementation (libs.converter.gson)
+    implementation (libs.logging.interceptor)
+
+    implementation(libs.coil.compose)
+
+
 }
 
 kapt {

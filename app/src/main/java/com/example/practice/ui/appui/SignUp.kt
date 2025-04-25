@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
@@ -47,7 +46,7 @@ import androidx.navigation.NavHostController
 import com.example.practice.R
 import com.example.practice.ui.common.HyperLinkText
 import com.example.practice.ui.common.ScaffoldBar
-import com.example.practice.ui.data.Sealed
+import com.example.practice.destination.Sealed
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
