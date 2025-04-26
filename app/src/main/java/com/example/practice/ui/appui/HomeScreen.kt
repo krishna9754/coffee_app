@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -31,6 +30,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
 import com.example.practice.MVVM.data.CoffeeData
 import com.example.practice.MVVM.viewModel.CoffeeViewModel
 import com.example.practice.R
@@ -41,8 +41,9 @@ import com.example.practice.ui.components.ImageSlider
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
-    onNext: () -> Unit,
-    viewModel: CoffeeViewModel = hiltViewModel()
+//    onNext: () -> Unit,
+    viewModel: CoffeeViewModel = hiltViewModel(),
+    navController: NavHostController
 ) {
     val coffeeList by viewModel.coffeeState.collectAsState()
     val error by viewModel.error.collectAsState()
@@ -92,7 +93,7 @@ fun HomeScreen(
 
                     RowLazy(coffeeList)
                     HorizontalDivider(modifier = Modifier.padding(top = 10.dp))
-                    Coffee(onNext = onNext, coffeeList = coffeeList)
+                    Coffee(navController = navController, coffeeList = coffeeList)
                 }
             }
         }
@@ -124,20 +125,15 @@ fun RowLazy(coffeeData: List<CoffeeData>) {
                 Column(
                     modifier = Modifier.padding(10.dp)
                 ) {
-                    Text(
-                        text = data.title,
-                        fontWeight = FontWeight.Bold,
-                        color = Color(textColor)
-                    )
+                    data.roaster?.let {
+                        Text(
+                            text = it,
+                            fontWeight = FontWeight.Bold,
+                            color = Color(textColor)
+                        )
+                    }
                 }
             }
         }
     }
-}
-
-
-@Preview
-@Composable
-fun PrevHome() {
-    HomeScreen(onNext = {})
 }

@@ -1,12 +1,19 @@
 package com.example.practice.destination
 
-import androidx.compose.material3.DrawerValue
-import androidx.compose.material3.rememberDrawerState
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
+import com.example.practice.MVVM.viewModel.CoffeeViewModel
 import com.example.practice.ui.appui.Detail
 import com.example.practice.ui.appui.HomeScreen
 import com.example.practice.ui.appui.Order
@@ -20,27 +27,54 @@ fun CoffeeNavigation() {
         composable(Sealed.SplashScreen.name) {
             SplashScreen(navController)
         }
-//        composable((Sealed.NavigationDrawer.name)) {
-//            NavigationDrawer(navController)
-//        }
+
         composable(Sealed.HomeScreen.name) {
-            val scope = rememberCoroutineScope()
-            val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
             HomeScreen(
-                onNext = { navController.navigate(Sealed.Detail.name) },
+                navController = navController
             )
         }
-        composable(Sealed.Detail.name) {
-            Detail(
-                onNext = { navController.navigate(Sealed.Order.name) },
-                onBack = { navController.popBackStack() }
-            )
+
+        composable(
+            route = "${Sealed.Detail.name}/{coffeeId}",
+            arguments = listOf(navArgument("coffeeId") { type = NavType.StringType })
+        ) { backStackEntry ->
+            val coffeeId = backStackEntry.arguments?.getString("coffeeId")
+            val viewModel: CoffeeViewModel = hiltViewModel()
+            val coffeeItem = viewModel.coffeeState.collectAsState().value.find { it.id == coffeeId }
+
+            if (coffeeItem != null) {
+                Detail(
+                    coffee = coffeeItem,
+                    navController = navController,
+                    onBack = { navController.popBackStack() },
+                )
+            } else {
+                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    CircularProgressIndicator()
+                }
+            }
         }
-        composable(Sealed.Order.name) {
-            Order(
-                onNext = { navController.navigate(Sealed.ThankYou.name) },
-                onBack = { navController.popBackStack() }
-            )
+
+
+        composable(
+            route = "${Sealed.Order.name}/{coffee_id}",
+            arguments = listOf(navArgument("coffee_id") { type = NavType.StringType })
+        ) { backStackEntry ->
+            val coffeeId = backStackEntry.arguments?.getString("coffee_id")
+            val viewModel: CoffeeViewModel = hiltViewModel()
+            val coffeeItem = viewModel.coffeeState.collectAsState().value.find { it.id == coffeeId }
+
+            if (coffeeItem != null) {
+                Order(
+                    coffee = coffeeItem!!,
+                    navController = navController,
+                    onBack = { navController.popBackStack() }
+                )
+            } else {
+                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    CircularProgressIndicator()
+                }
+            }
         }
         composable(Sealed.ThankYou.name) {
             ThankYou(

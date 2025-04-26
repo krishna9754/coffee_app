@@ -81,7 +81,7 @@ fun SplashScreen(navController: NavHostController) {
                     modifier = Modifier.padding(top = 20.dp),
                     color = Color.White,
                     fontWeight = FontWeight.SemiBold,
-                    fontSize = 33.sp,
+                    fontSize = 24.sp,
                     textAlign = TextAlign.Center
                 )
 
@@ -97,12 +97,12 @@ fun SplashScreen(navController: NavHostController) {
                 Button(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(top = 150.dp, bottom = 25.dp),
+                        .padding(top = 150.dp, bottom = 45.dp),
                     onClick = { launched = true },
                     colors = ButtonDefaults.buttonColors(Color(0xFFC67C4E)),
                     shape = RoundedCornerShape(10.dp)
                 ) {
-                    Text(text = "Get Started", modifier = Modifier.padding(vertical = 5.dp))
+                    Text(text = "Get Started", modifier = Modifier.padding(vertical = 5.dp), color = Color.White)
                 }
             }
         }

@@ -1,7 +1,6 @@
 package com.example.practice.ui.appui
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -27,13 +26,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import coil3.compose.AsyncImage
+import androidx.navigation.NavHostController
 import com.example.practice.MVVM.data.CoffeeData
 import com.example.practice.R
+import com.example.practice.destination.Sealed
 import com.exyte.animatednavbar.utils.noRippleClickable
 
 @Composable
-fun Coffee(onNext: () -> Unit, coffeeList: List<CoffeeData>) {
+fun Coffee(coffeeList: List<CoffeeData>, navController: NavHostController) {
     LazyVerticalGrid(
         modifier = Modifier
             .fillMaxSize()
@@ -51,7 +51,8 @@ fun Coffee(onNext: () -> Unit, coffeeList: List<CoffeeData>) {
                     .height(380.dp)
             ) {
                 Column {
-                    Image( painter = painterResource( R.drawable.ic_coffieimage ),
+                    Image(
+                        painter = painterResource(R.drawable.ic_coffieimage),
                         contentDescription = null,
                         contentScale = ContentScale.Crop,
                         modifier = Modifier
@@ -66,7 +67,8 @@ fun Coffee(onNext: () -> Unit, coffeeList: List<CoffeeData>) {
                         text = coffee.title.ifEmpty { "Cappuccino" },
                         modifier = Modifier.padding(start = 15.dp),
                         fontSize = 16.sp,
-                        fontWeight = FontWeight.Bold
+                        fontWeight = FontWeight.Bold,
+                        color = Color.Black
                     )
 
                     Text(
@@ -85,11 +87,18 @@ fun Coffee(onNext: () -> Unit, coffeeList: List<CoffeeData>) {
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Text(text = "$4.53", fontSize = 20.sp, fontWeight = FontWeight.Bold)
+                        Text(
+                            text = "$ ${coffee.price.toString()}",
+                            fontSize = 20.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = Color.Black
+                        )
                         Image(
                             painter = painterResource(id = R.drawable.ic_plus_icon),
                             contentDescription = "",
-                            modifier = Modifier.noRippleClickable { onNext() }
+                            modifier = Modifier.noRippleClickable {
+                                navController.navigate("${Sealed.Detail.name}/${coffee.id}")
+                            }
                         )
                     }
                 }
