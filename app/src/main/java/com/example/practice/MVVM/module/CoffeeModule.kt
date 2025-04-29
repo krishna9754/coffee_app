@@ -1,8 +1,12 @@
 package com.example.practice.MVVM.module
 
 import android.content.Context
+import androidx.room.Room
 import com.example.practice.MVVM.data.CoffeeApi
-import com.example.practice.MVVM.dto.CoffeeDataBase
+import com.example.practice.MVVM.dto.coffee.CoffeeDataBase
+import com.example.practice.MVVM.dto.user.UserDao
+import com.example.practice.MVVM.dto.user.UserDataBase
+import com.example.practice.MVVM.repository.UserRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -13,23 +17,24 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
-import androidx.room.Room
-import com.example.practice.MVVM.dto.CoffeeDAO
 
 
 @Module
 @InstallIn(SingletonComponent::class)
 object CoffeeModule {
 
+    // Provide Base URL
     @Provides
-    fun provideBaseUrl() = "https://apis-for-coffee-analysis.p.rapidapi.com/"
+    fun provideBaseUrl(): String = "https://apis-for-coffee-analysis.p.rapidapi.com/"
 
+    // Provide Retrofit Instance
     @Provides
     @Singleton
     fun provideRetrofit(provideBaseUrl: String): Retrofit {
         val logging = HttpLoggingInterceptor().apply {
-            setLevel(HttpLoggingInterceptor.Level.BODY)
+            level = HttpLoggingInterceptor.Level.BODY
         }
+
         val client = OkHttpClient.Builder()
             .addInterceptor { chain ->
                 val request = chain.request().newBuilder()
@@ -48,22 +53,28 @@ object CoffeeModule {
             .build()
     }
 
+    // Provide Coffee API
     @Provides
-    fun provideApi(retrofit: Retrofit): CoffeeApi =
+    @Singleton
+    fun provideCoffeeApi(retrofit: Retrofit): CoffeeApi =
         retrofit.create(CoffeeApi::class.java)
 
+    // Provide Room Database
+    @Provides
+    @Singleton
+    fun provideUserDatabase(@ApplicationContext context: Context): UserDataBase {
+        return Room.databaseBuilder(
+            context,
+            UserDataBase::class.java,
+            "user_database"
+        ).fallbackToDestructiveMigration().build()
+    }
 
-    //DataBase
-//    @Provides
-//    @Singleton
-//    fun provideDatabase(@ApplicationContext context: Context): CoffeeDataBase =
-//        Room.databaseBuilder(
-//            context,
-//            CoffeeDataBase::class.java,
-//            "coffee_database"
-//        ).build()
-//
-//    @Provides
-//    fun provideCoffeeDao(database: CoffeeDataBase): CoffeeDAO =
-//        database.coffeeDao()
+    // Provide User DAO
+    @Provides
+    @Singleton
+    fun provideUserDao(database: UserDataBase): UserDao = database.userDao()
+
+    @Provides
+    fun provideUserRepository(userDao: UserDao): UserRepository = UserRepository(userDao)
 }

@@ -1,4 +1,4 @@
-package com.example.practice.MVVM.dto
+package com.example.practice.MVVM.dto.coffee
 
 import androidx.room.TypeConverter
 import com.google.gson.Gson

@@ -2,6 +2,7 @@ package com.example.practice.ui.appui
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -13,10 +14,14 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -28,12 +33,20 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.practice.MVVM.data.CoffeeData
+import com.example.practice.MVVM.viewModel.CoffeeViewModel
 import com.example.practice.R
 import com.example.practice.destination.Sealed
 import com.exyte.animatednavbar.utils.noRippleClickable
 
 @Composable
-fun Coffee(coffeeList: List<CoffeeData>, navController: NavHostController) {
+fun Coffee(
+    coffeeList: List<CoffeeData>,
+    navController: NavHostController,
+    viewModel: CoffeeViewModel,
+) {
+
+    val isLoading by viewModel.isLoading.collectAsState()
+
     LazyVerticalGrid(
         modifier = Modifier
             .fillMaxSize()
@@ -76,7 +89,7 @@ fun Coffee(coffeeList: List<CoffeeData>, navController: NavHostController) {
                         modifier = Modifier.padding(start = 15.dp, bottom = 15.dp),
                         fontSize = 12.sp,
                         fontWeight = FontWeight.Normal,
-                        maxLines = 3,
+                        maxLines = 2,
                         color = Color(0xff9B9B9B)
                     )
 
@@ -101,6 +114,27 @@ fun Coffee(coffeeList: List<CoffeeData>, navController: NavHostController) {
                             }
                         )
                     }
+                }
+            }
+        }
+        item {
+            Spacer(modifier = Modifier.height(15.dp))
+
+            if (isLoading) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    CircularProgressIndicator()
+                }
+            } else {
+                Button(
+                    modifier = Modifier.fillMaxWidth(),
+                    onClick = { viewModel.loadNextPage() }
+                ) {
+                    Text(text = "Load More")
                 }
             }
         }

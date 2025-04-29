@@ -1,6 +1,5 @@
 package com.example.practice.MVVM.viewModel
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.practice.MVVM.data.CoffeeData
@@ -22,6 +21,12 @@ class CoffeeViewModel @Inject constructor(
     private val _error = MutableStateFlow<String?>(null)
     val error: StateFlow<String?> = _error
 
+    private var currentPage = 2
+
+    private val _isLoading = MutableStateFlow(false)
+    val isLoading: StateFlow<Boolean> = _isLoading
+
+
     init {
         fetchCoffeeData()
     }
@@ -29,19 +34,24 @@ class CoffeeViewModel @Inject constructor(
     private fun fetchCoffeeData() {
         viewModelScope.launch {
             _error.value = null
+            _isLoading.value = true
             try {
-                val remoteCoffeeList = repository.fetchCoffee()
+                val remoteCoffeeList = repository.fetchCoffee(page = currentPage)
                 if (remoteCoffeeList.isNotEmpty()) {
-                    _coffeeState.value = remoteCoffeeList
-                    Log.d("CoffeeViewModel", "Fetched ${remoteCoffeeList.size} coffee items")
+                    _coffeeState.value += remoteCoffeeList
                 } else {
                     _error.value = "No coffee data available. Please try again."
-                    Log.w("CoffeeViewModel", "No coffee data received")
                 }
             } catch (e: Exception) {
                 _error.value = "Failed to load data: ${e.localizedMessage}"
-                Log.e("CoffeeViewModel", "API Error: ${e.localizedMessage}", e)
+            } finally {
+                _isLoading.value = false
             }
         }
+    }
+
+    fun loadNextPage() {
+        currentPage++
+        fetchCoffeeData()
     }
 }

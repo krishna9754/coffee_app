@@ -46,7 +46,7 @@ fun SplashScreen(navController: NavHostController) {
 
     LaunchedEffect(launched) {
         if (launched) {
-            delay(2000)
+            delay(1500)
             navController.navigate(Sealed.HomeScreen.name) {
                 popUpTo(0)
             }

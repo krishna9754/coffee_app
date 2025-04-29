@@ -14,6 +14,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.practice.MVVM.viewModel.CoffeeViewModel
+import com.example.practice.ui.appui.AddressScreen
 import com.example.practice.ui.appui.Detail
 import com.example.practice.ui.appui.HomeScreen
 import com.example.practice.ui.appui.Order
@@ -66,7 +67,7 @@ fun CoffeeNavigation() {
 
             if (coffeeItem != null) {
                 Order(
-                    coffee = coffeeItem!!,
+                    coffee = coffeeItem,
                     navController = navController,
                     onBack = { navController.popBackStack() }
                 )
@@ -76,6 +77,14 @@ fun CoffeeNavigation() {
                 }
             }
         }
+        composable(
+            route = "${Sealed.Address.name}/{coffee_id}",
+            arguments = listOf(navArgument("coffee_id") { type = NavType.StringType })
+        ) { backStackEntry ->
+            val coffeeId = backStackEntry.arguments?.getString("coffee_id") ?: ""
+            AddressScreen(navController = navController, coffeeId = coffeeId)
+        }
+
         composable(Sealed.ThankYou.name) {
             ThankYou(
                 onHomeBack = { navController.navigate(Sealed.HomeScreen.name) }
