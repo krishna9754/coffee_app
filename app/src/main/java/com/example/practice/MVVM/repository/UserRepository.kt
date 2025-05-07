@@ -10,4 +10,5 @@ class UserRepository @Inject constructor(
 ) {
     fun getAllUser(): Flow<List<UserData>> = userDao.getAllUserData()
     suspend fun insertUser(user: UserData) = userDao.insertUserData(user)
+    suspend fun deleteUser(user: UserData) = userDao.deleteUserData(user)
 }

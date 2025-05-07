@@ -69,7 +69,7 @@ fun HomeScreen(
             ScaffoldBar(
                 icon = R.drawable.ic_user,
                 Icon = R.drawable.ic_hamburger,
-                appBarColor = TopAppBarDefaults.topAppBarColors(Color(0xffC67C4E)),
+                appBarColor = TopAppBarDefaults.topAppBarColors(Color(0xfff5b419)),
             ) {
                 Column(
                     modifier = Modifier
@@ -113,7 +113,7 @@ fun RowLazy(coffeeData: List<CoffeeData>) {
         horizontalArrangement = Arrangement.spacedBy(10.dp)
     ) {
         itemsIndexed(coffeeData) { index, data ->
-            val color = if (index == 0) 0xffC67C4E else 0xffFFFFFF
+            val color = if (index == 0) 0xfff5b419 else 0xffFFFFFF
             val textColor = if (index == 0) 0xffFFFFFF else 0xff151515
 
             Card(

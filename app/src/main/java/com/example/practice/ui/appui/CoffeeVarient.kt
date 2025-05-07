@@ -111,7 +111,7 @@ fun Coffee(
                             contentDescription = "",
                             modifier = Modifier.noRippleClickable {
                                 navController.navigate("${Sealed.Detail.name}/${coffee.id}")
-                            }
+                            },
                         )
                     }
                 }

@@ -177,7 +177,7 @@ fun PriceTag(navController: NavHostController, coffee: CoffeeData) {
                 .padding(15.dp)
                 .fillMaxWidth(),
             onClick = { navController.navigate("${Sealed.Order.name}/${coffee.id}") },
-            colors = ButtonDefaults.buttonColors(Color(0xffC67C4E)),
+            colors = ButtonDefaults.buttonColors(Color(0xfff5b419)),
             shape = RoundedCornerShape(10.dp)
         ) {
             Text(text = "Buy Now", modifier = Modifier.padding(vertical = 5.dp, horizontal = 20.dp))

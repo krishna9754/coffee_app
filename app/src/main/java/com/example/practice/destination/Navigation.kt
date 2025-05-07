@@ -85,10 +85,28 @@ fun CoffeeNavigation() {
             AddressScreen(navController = navController, coffeeId = coffeeId)
         }
 
-        composable(Sealed.ThankYou.name) {
+        composable(
+            route = "${Sealed.ThankYou.name}/{coffee_id}/{total_payment}/{items}",
+            arguments = listOf(
+                navArgument("coffee_id") { type = NavType.StringType },
+                navArgument("total_payment") { type = NavType.StringType },
+                navArgument("items") { type = NavType.StringType },
+            )
+        ) { backStackEntry ->
+            val coffeeId = backStackEntry.arguments?.getString("coffee_id")
+            val totalPayment = backStackEntry.arguments?.getString("total_payment")?.toDoubleOrNull() ?: 0.0
+            val items = backStackEntry.arguments?.getString("items")
+
+            val viewModel: CoffeeViewModel = hiltViewModel()
+            val coffeeItem = viewModel.coffeeState.collectAsState().value.find { it.id == coffeeId }
+
             ThankYou(
-                onHomeBack = { navController.navigate(Sealed.HomeScreen.name) }
+                onHomeBack = { navController.navigate(Sealed.HomeScreen.name) },
+                coffeeId = coffeeItem,
+                totalPayment = totalPayment,
+                items = items
             )
         }
+
     }
 }

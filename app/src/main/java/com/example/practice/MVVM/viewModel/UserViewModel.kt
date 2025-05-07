@@ -8,7 +8,6 @@ import androidx.lifecycle.viewModelScope
 import com.example.practice.MVVM.data.UserData
 import com.example.practice.MVVM.repository.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -20,8 +19,7 @@ class UserViewModel @Inject constructor(
     private val repository: UserRepository
 ) : ViewModel() {
 
-    var insertSuccess by mutableStateOf(false)
-
+    // Mutable states for form input fields
     var name by mutableStateOf("")
     var address by mutableStateOf("")
     var phone by mutableStateOf("")
@@ -30,25 +28,49 @@ class UserViewModel @Inject constructor(
     var state by mutableStateOf("")
     val userId: Int? = null
 
+    var insertSuccess by mutableStateOf(false)
+
+    // StateFlow for list of user addresses
     private val _userAddresses = MutableStateFlow<List<UserData>>(emptyList())
     val userAddresses: StateFlow<List<UserData>> = _userAddresses.asStateFlow()
 
+    // StateFlow for selected address
     private val _selectedAddress = MutableStateFlow<UserData?>(null)
     val selectedAddress: StateFlow<UserData?> = _selectedAddress
 
-    fun onNameChange(newName: String) { name = newName }
-    fun onAddressChange(newAddress: String) { address = newAddress }
-    fun onPhoneChange(newPhone: String) { phone = newPhone }
-    fun onPincodeChange(newPincode: String) { pincode = newPincode }
-    fun onCityChange(newCity: String) { city = newCity }
-    fun onStateChange(newState: String) { state = newState }
+    // Update methods for form fields
+    fun onNameChange(newName: String) {
+        name = newName
+    }
 
+    fun onAddressChange(newAddress: String) {
+        address = newAddress
+    }
+
+    fun onPhoneChange(newPhone: String) {
+        phone = newPhone
+    }
+
+    fun onPincodeChange(newPincode: String) {
+        pincode = newPincode
+    }
+
+    fun onCityChange(newCity: String) {
+        city = newCity
+    }
+
+    fun onStateChange(newState: String) {
+        state = newState
+    }
+
+    // Select address to use in Order screen
     fun selectAddress(address: UserData) {
         _selectedAddress.value = address
     }
 
-
+    // Save address and update state
     fun saveUserAddress() {
+        insertSuccess = true
         viewModelScope.launch {
             val user = UserData(
                 name = name,
@@ -60,18 +82,32 @@ class UserViewModel @Inject constructor(
             )
             repository.insertUser(user)
             getAllUsers()
-//            clearFields()
+            _selectedAddress.value = user
+            // clearFields()
         }
     }
 
+    // Fetch all user addresses
     fun getAllUsers() {
         viewModelScope.launch {
-            repository.getAllUser().collect {
-                _userAddresses.value = it
+            repository.getAllUser().collect { users ->
+                _userAddresses.value = users
+                if (_selectedAddress.value == null && users.isNotEmpty()) {
+                    _selectedAddress.value = users.last()
+                }
             }
         }
     }
 
+    //Delete user
+    fun deleteUser(user: UserData) {
+        viewModelScope.launch {
+            repository.deleteUser(user)
+            getAllUsers()
+        }
+    }
+
+    // Clear form fields
     private fun clearFields() {
         name = ""
         address = ""

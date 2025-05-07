@@ -3,7 +3,6 @@ package com.example.practice.MVVM.module
 import android.content.Context
 import androidx.room.Room
 import com.example.practice.MVVM.data.CoffeeApi
-import com.example.practice.MVVM.dto.coffee.CoffeeDataBase
 import com.example.practice.MVVM.dto.user.UserDao
 import com.example.practice.MVVM.dto.user.UserDataBase
 import com.example.practice.MVVM.repository.UserRepository

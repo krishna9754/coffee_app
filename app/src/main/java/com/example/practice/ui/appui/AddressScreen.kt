@@ -8,6 +8,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -22,13 +24,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.practice.MVVM.viewModel.UserViewModel
 import com.example.practice.R
-import com.example.practice.destination.Sealed
 import com.example.practice.ui.common.ScaffoldBar
 import kotlinx.coroutines.launch
 
@@ -70,7 +73,8 @@ fun AddressScreen(
             text = "Mobile no.",
             textValue = userViewModel.phone,
             changeValue = userViewModel::onPhoneChange,
-            placeholder = "Mobile no."
+            placeholder = "Mobile no.",
+            keyBoardType = KeyboardType.Number
         )
         Spacer(modifier = Modifier.height(15.dp))
         CustomNameText(
@@ -91,7 +95,8 @@ fun AddressScreen(
             text = "Pincode",
             textValue = userViewModel.pincode,
             changeValue = userViewModel::onPincodeChange,
-            placeholder = "Pincode"
+            placeholder = "Pincode",
+            keyBoardType = KeyboardType.Number
         )
         Spacer(modifier = Modifier.height(15.dp))
         CustomNameText(
@@ -99,7 +104,8 @@ fun AddressScreen(
             textValue = userViewModel.address,
             changeValue = userViewModel::onAddressChange,
             placeholder = "Full Address...",
-            minLines = 8
+            minLines = 4,
+            imeAction = ImeAction.Done
         )
         Spacer(modifier = Modifier.height(15.dp))
         Button(
@@ -114,15 +120,18 @@ fun AddressScreen(
                     userViewModel.pincode.isNotBlank()
                 ) {
                     scope.launch {
-                        userViewModel.saveUserAddress()
-                        Toast.makeText(context, "Address Saved", Toast.LENGTH_SHORT).show()
-                        navController.popBackStack()
+                            userViewModel.saveUserAddress()
+                        if (userViewModel.insertSuccess) {
+                            Toast.makeText(context, "Address Saved", Toast.LENGTH_SHORT).show()
+                            navController.popBackStack()
+                        }
                     }
                 } else {
                     Toast.makeText(context, "Please fill all fields", Toast.LENGTH_SHORT).show()
                 }
             },
-            colors = ButtonDefaults.buttonColors(Color(0xffC67C4E))
+            colors = ButtonDefaults.buttonColors(Color(0xfff5b419)),
+            shape = RoundedCornerShape(10.dp)
         ) {
             Text(text = "Save")
         }
@@ -136,7 +145,9 @@ private fun CustomNameText(
     textValue: String = "",
     changeValue: (String) -> Unit = {},
     placeholder: String = "",
-    minLines: Int = 1
+    minLines: Int = 1,
+    keyBoardType: KeyboardType = KeyboardType.Text,
+    imeAction: ImeAction = ImeAction.Next
 ) {
     Text(text = text, fontSize = 18.sp, fontWeight = FontWeight.SemiBold)
     Spacer(modifier = Modifier.height(10.dp))
@@ -145,6 +156,10 @@ private fun CustomNameText(
         onValueChange = changeValue,
         modifier = Modifier.fillMaxWidth(),
         placeholder = { Text(text = placeholder, color = Color.LightGray) },
-        minLines = minLines
+        maxLines = minLines,
+        keyboardOptions = KeyboardOptions(
+            imeAction = imeAction,
+            keyboardType = keyBoardType
+        ),
     )
 }

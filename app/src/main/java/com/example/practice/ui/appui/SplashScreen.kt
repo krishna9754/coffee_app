@@ -99,7 +99,7 @@ fun SplashScreen(navController: NavHostController) {
                         .fillMaxWidth()
                         .padding(top = 150.dp, bottom = 45.dp),
                     onClick = { launched = true },
-                    colors = ButtonDefaults.buttonColors(Color(0xFFC67C4E)),
+                    colors = ButtonDefaults.buttonColors(Color(0xfff5b419)),
                     shape = RoundedCornerShape(10.dp)
                 ) {
                     Text(text = "Get Started", modifier = Modifier.padding(vertical = 5.dp), color = Color.White)
